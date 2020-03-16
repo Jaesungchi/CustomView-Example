@@ -4,6 +4,16 @@
 
 안드로이드 스튜디오 커스텀뷰를 직접 제작해보고 적용해보기 위한 프로젝트입니다.
 
+0. [소개](https://github.com/Jaesungchi/CustomView-Example#0-소개)
+
+   (1) [커스텀뷰 란?](https://github.com/Jaesungchi/CustomView-Example#1-커스텀뷰-란)
+
+   (2) [시작하기 전...](https://github.com/Jaesungchi/CustomView-Example#2-시작하기-전)
+
+   (3) [오버라이드 메소드](https://github.com/Jaesungchi/CustomView-Example#3-오버라이드-메소드)
+
+1. [ViewGroup에서 상속받아 만들기](https://github.com/Jaesungchi/CustomView-Example#1-ViewGroup에서-상속받아-만들기)
+
 ## 0. 소개
 
 ### (1) 커스텀뷰 란?
@@ -36,3 +46,34 @@ onDraw()에서는 개발자가 원하는대로 구현할 수 있는 Canvas를 �
 
 onMeasure()은 뷰와 뷰에 포함된 컨텐츠의 사이즈를 측정해 측정된 width와 height를 결정합니다. onMeasure()은 measure(int,int)에 의해 호출되며 measure()에서 뷰의 사이즈를 측정하고 실제 측정된 사이즈가 수행되는 곳은 onMeasure()입니다. onMeasure()을 오버라이드 하는 경우엔 setMeasuredDimension(int,int)를 호출해 측정된 사이즈를 저장할 수 있도록 해야합니다.
 
+## 1. ViewGroup에서 상속받아 만들기
+
+ViewGroup에서 EditText를 상속받아 밑줄이 있는 EditText를 만들어 보겠습니다.
+
+```kotlin
+class LinedEditText : EditText {
+    private val mRect : Rect
+    private val mPaint : Paint
+    constructor(context: Context, attrs : AttributeSet) : super(context, attrs) {
+        mRect = Rect()
+        mPaint = Paint()
+        mPaint.style = Paint.Style.STROKE
+        mPaint.color = 0x800000FF.toInt()
+    }
+
+    override fun onDraw(canvas: Canvas?) {
+        val count = lineCount
+        val r = mRect
+        val paint  = mPaint
+        for(i in 0 until count){
+            val baseline = getLineBounds(i,r)
+            canvas?.drawLine(r.left.toFloat(), (baseline).toFloat(), r.right.toFloat(), (baseline).toFloat(),paint)
+        }
+        super.onDraw(canvas)
+    }
+}
+```
+
+위의 코드에 설명을 더하면, 생성자를 통해 mRect와 mPaint객체를 초기화 하고 onDraw메소드를 통해 선을 그립니다.
+
+lineCount를 통해 몇줄 인지를 가져오고, getLineBounds를 통해 그 줄의 좌표를 가져오며 canvas.drawLine을 통해 줄을 하나씩 그려주는 방식으로 그릴수 있습니다.
