@@ -14,6 +14,8 @@
 
 1. [ViewGroup에서 상속받아 만들기](https://github.com/Jaesungchi/CustomView-Example#1-ViewGroup에서-상속받아-만들기)
 
+2. [View를 상속받아 구현하기](https://github.com/Jaesungchi/CustomView-Example#2-View를-상속받아-구현하기)
+
 ## 0. 소개
 
 ### (1) 커스텀뷰 란?
@@ -77,3 +79,54 @@ class LinedEditText : EditText {
 위의 코드에 설명을 더하면, 생성자를 통해 mRect와 mPaint객체를 초기화 하고 onDraw메소드를 통해 선을 그립니다.
 
 lineCount를 통해 몇줄 인지를 가져오고, getLineBounds를 통해 그 줄의 좌표를 가져오며 canvas.drawLine을 통해 줄을 하나씩 그려주는 방식으로 그릴수 있습니다.
+
+## 2. View를 상속받아 구현하기
+
+자 이제 View를 상속받아 구현할 차례입니다. 
+
+기본적으로 구현할 생성자와 onDraw를 구현합니다.
+
+```kotlin
+class ContentBox : View {
+    private val mPaint : Paint
+
+    constructor(context : Context) : super(context,null) {
+        mPaint = Paint()
+        mPaint.color = Color.BLACK
+    }
+    constructor(context : Context, attrs : AttributeSet) : super(context, attrs) {
+        mPaint = Paint()
+        mPaint.color = Color.BLACK
+    }
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+    }
+}
+```
+
+
+
+## Issue
+
+```kotlin
+java.lang.RuntimeException: Unable to start activity ComponentInfo{com.kotlin.jaesungchi.customview/com.kotlin.jaesungchi.customview.MainActivity}: android.view.InflateException: Binary XML file line #20 in com.kotlin.jaesungchi.customview:layout/activity_main: Binary XML file line #20 in com.kotlin.jaesungchi.customview:layout/activity_main: Error inflating class com.kotlin.jaesungchi.customview.ContentBox
+```
+
+```kotlin
+constructor(context : Context) : super(context) {
+    ...
+}
+```
+
+커스텀뷰 제작 이슈 이다. 생성자를 Context만 있는 생성자가 있어서 발생한 에러이다. constructor를 오버로딩하거나 Parameter에 AttributeSet 변수를 추가한다.
+
+```kotlin
+constructor(context : Context) : super(context,null) {
+    ...
+}
+constructor(context : Context, attrs : AttributeSet) : super(context, attrs) {
+    ...
+}
+```
+
+---
