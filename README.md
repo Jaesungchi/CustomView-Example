@@ -6,11 +6,13 @@
 
 0. [소개](https://github.com/Jaesungchi/CustomView-Example#0-소개)
 
-   (1) [커스텀뷰 란?](https://github.com/Jaesungchi/CustomView-Example#1-커스텀뷰-란)
+    (1) [커스텀뷰 란?](https://github.com/Jaesungchi/CustomView-Example#1-커스텀뷰-란)
 
-   (2) [시작하기 전...](https://github.com/Jaesungchi/CustomView-Example#2-시작하기-전)
+    (2) [시작하기 전...](https://github.com/Jaesungchi/CustomView-Example#2-시작하기-전)
 
-   (3) [오버라이드 메소드](https://github.com/Jaesungchi/CustomView-Example#3-오버라이드-메소드)
+    (3) [커스텀뷰 LifeCycle](https://github.com/Jaesungchi/CustomView-Example#3-커스텀뷰-LifeCycle)
+
+    (4) [오버라이드 메소드](https://github.com/Jaesungchi/CustomView-Example#4-오버라이드-메소드)
 
 1. [ViewGroup에서 상속받아 만들기](https://github.com/Jaesungchi/CustomView-Example#1-ViewGroup에서-상속받아-만들기)
 
@@ -40,7 +42,20 @@
 1. onDraw(), onMeasure(), onKeyDown()과 같이 on으로 시작하는 수퍼 클래스 메소드를 오버라이드합니다.
 2. 새로만든 커스텀 뷰를 기존에 사용방식과 동일하게 xml 레이아웃 등에서 사용하면 됩니다.
 
-### (3) 오버라이드 메소드
+### (3) 커스텀뷰 LifeCycle
+
+Constructor -> onAttachedToWindow() -> measure() -> onMeasure() -> layout() -> onLayout()
+
+-> dispatchDraw() -> draw() -> onDraw()  순으로 그려진다.
+
+간단하게 설명하자면
+
+- onAttachedToWindow()  : View가 Window에 연결되는 단계로, 이 단계부터 id로 접근이 가능.
+- onMeasure() : View의 사이즈를 측정한다.
+- onLayout() : 개별 자식View들의 사이즈 및 위치를 할당.
+- onDraw() : View를 그립니다.
+
+### (4) 오버라이드 메소드
 
 커스텀뷰를 만들기 위해 사용하는 메소드들 에서는 기본적으로 onDraw()와 onMeasure()이 있습니다.
 
