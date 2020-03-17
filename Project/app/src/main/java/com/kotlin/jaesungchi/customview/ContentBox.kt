@@ -5,24 +5,16 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 
-class ContentBox : View {
-
-    private val mPaint : Paint
-
-    constructor(context : Context) : super(context,null) {
-        mPaint = Paint()
-        mPaint.color = Color.BLACK
-    }
-    constructor(context : Context, attrs : AttributeSet) : super(context, attrs) {
-        mPaint = Paint()
-        mPaint.color = Color.BLACK
+class ContentBox @JvmOverloads constructor(
+    context : Context, attrs: AttributeSet? = null, defStyleAttr : Int = 0
+) : View(context, attrs, defStyleAttr) {
+    init{
     }
     override fun onDraw(canvas: Canvas?) {
-
-        canvas?.drawText("test Data\ntextData", 0F,0F,mPaint)
         super.onDraw(canvas)
     }
 }
