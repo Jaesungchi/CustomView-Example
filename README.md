@@ -18,6 +18,8 @@
 
 3. [CustomView 제작](https://github.com/Jaesungchi/CustomView-Example#3-customview-제작)
 
+4. [사용하기](https://github.com/Jaesungchi/CustomView-Example#4-사용하기)
+
 ## 0. 소개
 
 ### (1) 커스텀뷰 란?
@@ -59,26 +61,29 @@ onMeasure()은 뷰와 뷰에 포함된 컨텐츠의 사이즈를 측정해 측�
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id = "@+id/CL"
+    android:id = "@+id/contentBox"
+    android:background="#000000"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/thumbnail"
+        android:id="@+id/contentPicture"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_gravity="center"
         android:src="@drawable/abc_vector_test"
+        android:background="#FFFFFF"
         />
     <TextView
-        android:id="@+id/text"
-        android:layout_width="atch_parent"
+        android:id="@+id/contentText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="임의 텍스트"
         android:textSize="20dp"
+        android:background="#FFFFFF"
         />
 </LinearLayout>
 ```
@@ -90,11 +95,10 @@ onMeasure()은 뷰와 뷰에 포함된 컨텐츠의 사이즈를 측정해 측�
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name ="ContentBox">
-        <attr name="content" format="reference|string"/>
-        <attr name="picture" format="reference"/>
-        <attr name="bg" format="reference|integer"/>
-    </declare-styleable>
+<declare-styleable name ="ContentBox">
+    <attr name="contents" format="string"/>
+    <attr name="picture" format="reference|integer"/>
+</declare-styleable>
 </resources>
 ```
 
@@ -109,6 +113,7 @@ class ContentBox @JvmOverloads constructor(
     init{
         val v = LayoutInflater.from(context).inflate(R.layout.customlayout,this,false)
         addView(v)
+        attrs?.let { getAttrs(it) }
     }
 
     private fun getAttrs(attrs : AttributeSet){
@@ -118,28 +123,21 @@ class ContentBox @JvmOverloads constructor(
     }
 
     private fun setTypeArray(typedArray : TypedArray){
-        val bg_resID = typedArray.getResourceId(R.styleable.ContentBox_bg,R.drawable.ic_launcher_foreground)
-        findViewById<LinearLayout>(R.id.CL).setBackgroundResource(bg_resID)
+        val picture_resID = typedArray.getResourceId(R.styleable.ContentBox_picture,R.drawable.face)
+        findViewById<ImageView>(R.id.contentPicture).setImageResource(picture_resID)
 
-        val picture_resID = typedArray.getResourceId(R.styleable.ContentBox_picture,R.drawable.ic_launcher_foreground)
-        findViewById<ImageView>(R.id.thumbnail).setImageResource(picture_resID)
-
-        val textContent = typedArray.getString(R.styleable.ContentBox_content)
-        findViewById<TextView>(R.id.text).setText(textContent)
+        val textContent = typedArray.getString(R.styleable.ContentBox_contents)
+        findViewById<TextView>(R.id.contentText).text = textContent
 
         typedArray.recycle()
     }
 
-    fun setBg(bg_resID : Int){
-        findViewById<LinearLayout>(R.id.CL).setBackgroundResource(bg_resID)
-    }
-
     fun setPicture(picture_resID : Int){
-        findViewById<ImageView>(R.id.thumbnail).setImageResource(picture_resID)
+        findViewById<ImageView>(R.id.contentPicture).setImageResource(picture_resID)
     }
 
     fun setContent(textContent : String){
-        findViewById<TextView>(R.id.text).setText(textContent)
+        findViewById<TextView>(R.id.contentText).setText(textContent)
     }
 }
 ```
@@ -147,6 +145,34 @@ class ContentBox @JvmOverloads constructor(
 클래스 생성과 동시에 constructor를 통해 초기화를 진행합니다.
 
 getAttrs() 와 setTypeArray()에서는 attrs.xml에서 선언한 attribute를 이용하여 이를 각 view에 넣어주는 역할을 합니다.
+
+## 4. 사용하기
+
+사용하는 방법으로는 xml파일에 직접 넣는 방법과 코드상에서 추가하는 방법, 이 2가지가 있습니다.
+
+첫번째로 xml파일에 직접 넣는 방법은 아래와 같습니다.
+
+```xml
+<com.kotlin.jaesungchi.customview.ContentBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contents="콘텐츠"
+        app:picture="사진"
+        />
+```
+
+두번째로 코드상에서 구현하는 방법입니다. 기존 View와 같은 방식으로 사용하면 됩니다.
+
+```
+val newContent = ContentBox(this)
+newContent.setContent("안녕하세요 반갑습니다.")
+newContent.setPicture(R.drawable.face)
+masterLayout.addView(newContent)
+```
+
+이상으로 간단하게 CustomView를 만들어 보는 프로젝트를 진행하였습니다.
+
+위에서 사용한 방식들을 활용하여 다양한 CustomView를 만들수 있습니다.
 
 ## Issue
 

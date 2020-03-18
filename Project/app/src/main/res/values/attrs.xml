@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <declare-styleable name ="ContentBox">
-    <attr name="content" format="reference|string"/>
-    <attr name="picture" format="reference"/>
-    <attr name="bg" format="reference|integer"/>
+    <attr name="contents" format="string"/>
+    <attr name="picture" format="reference|integer"/>
 </declare-styleable>
 </resources>

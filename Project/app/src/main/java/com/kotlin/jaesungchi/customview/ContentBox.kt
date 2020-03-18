@@ -14,6 +14,7 @@ class ContentBox @JvmOverloads constructor(
     init{
         val v = LayoutInflater.from(context).inflate(R.layout.customlayout,this,false)
         addView(v)
+        attrs?.let { getAttrs(it) }
     }
 
     private fun getAttrs(attrs : AttributeSet){
@@ -23,27 +24,20 @@ class ContentBox @JvmOverloads constructor(
     }
 
     private fun setTypeArray(typedArray : TypedArray){
-        val bg_resID = typedArray.getResourceId(R.styleable.ContentBox_bg,R.drawable.ic_launcher_foreground)
-        findViewById<LinearLayout>(R.id.CL).setBackgroundResource(bg_resID)
+        val picture_resID = typedArray.getResourceId(R.styleable.ContentBox_picture,R.drawable.background2)
+        findViewById<ImageView>(R.id.contentPicture).setImageResource(picture_resID)
 
-        val picture_resID = typedArray.getResourceId(R.styleable.ContentBox_picture,R.drawable.ic_launcher_foreground)
-        findViewById<ImageView>(R.id.thumbnail).setImageResource(picture_resID)
-
-        val textContent = typedArray.getString(R.styleable.ContentBox_content)
-        findViewById<TextView>(R.id.text).setText(textContent)
+        val textContent = typedArray.getString(R.styleable.ContentBox_contents)
+        findViewById<TextView>(R.id.contentText).text = textContent
 
         typedArray.recycle()
     }
 
-    fun setBg(bg_resID : Int){
-        findViewById<LinearLayout>(R.id.CL).setBackgroundResource(bg_resID)
-    }
-
     fun setPicture(picture_resID : Int){
-        findViewById<ImageView>(R.id.thumbnail).setImageResource(picture_resID)
+        findViewById<ImageView>(R.id.contentPicture).setImageResource(picture_resID)
     }
 
     fun setContent(textContent : String){
-        findViewById<TextView>(R.id.text).setText(textContent)
+        findViewById<TextView>(R.id.contentText).setText(textContent)
     }
 }
