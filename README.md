@@ -16,6 +16,8 @@
 
 2. [attrs xml파일 생성](https://github.com/Jaesungchi/CustomView-Example#2-attrs-xml파일-생성)
 
+3. [CustomView 제작](https://github.com/Jaesungchi/CustomView-Example#3-customview-제작)
+
 ## 0. 소개
 
 ### (1) 커스텀뷰 란?
@@ -71,7 +73,7 @@ onMeasure()은 뷰와 뷰에 포함된 컨텐츠의 사이즈를 측정해 측�
         />
     <TextView
         android:id="@+id/text"
-        android:layout_width="match_parent"
+        android:layout_width="atch_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
@@ -98,7 +100,53 @@ onMeasure()은 뷰와 뷰에 포함된 컨텐츠의 사이즈를 측정해 측�
 
 여기에 들어가는 reference는 @drawable/test 같은 reference를 말합니다.
 
+## 3. CustomView 제작
 
+```kotlin
+class ContentBox @JvmOverloads constructor(
+    context : Context, attrs: AttributeSet? = null, defStyleAttr : Int = 0
+) : LinearLayout(context,attrs,defStyleAttr) {
+    init{
+        val v = LayoutInflater.from(context).inflate(R.layout.customlayout,this,false)
+        addView(v)
+    }
+
+    private fun getAttrs(attrs : AttributeSet){
+        val typedArray = context.obtainStyledAttributes(attrs,R.styleable.ContentBox)
+
+        setTypeArray(typedArray)
+    }
+
+    private fun setTypeArray(typedArray : TypedArray){
+        val bg_resID = typedArray.getResourceId(R.styleable.ContentBox_bg,R.drawable.ic_launcher_foreground)
+        findViewById<LinearLayout>(R.id.CL).setBackgroundResource(bg_resID)
+
+        val picture_resID = typedArray.getResourceId(R.styleable.ContentBox_picture,R.drawable.ic_launcher_foreground)
+        findViewById<ImageView>(R.id.thumbnail).setImageResource(picture_resID)
+
+        val textContent = typedArray.getString(R.styleable.ContentBox_content)
+        findViewById<TextView>(R.id.text).setText(textContent)
+
+        typedArray.recycle()
+    }
+
+    fun setBg(bg_resID : Int){
+        findViewById<LinearLayout>(R.id.CL).setBackgroundResource(bg_resID)
+    }
+
+    fun setPicture(picture_resID : Int){
+        findViewById<ImageView>(R.id.thumbnail).setImageResource(picture_resID)
+    }
+
+    fun setContent(textContent : String){
+        findViewById<TextView>(R.id.text).setText(textContent)
+    }
+}
+```
+
+클래스 생성과 동시에 constructor를 통해 초기화를 진행합니다.
+
+getAttrs() 와 setTypeArray()에서는 attrs.xml에서 선언한 attribute를 이용하여 이를 각 view에 넣어주는 역할을 합니다.
 
 ## Issue
 
